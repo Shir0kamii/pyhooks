@@ -1,42 +1,44 @@
 from collections import defaultdict
 import inspect
 
+from pyhooks.utils import decorator_with_args
+
 HOOK_STORE = "_pyhook_hooks"
 PRECALL_HOOK_PREFIX = "pre_"
 POSTCALL_HOOK_PREFIX = "post_"
 
 
-def hook_register(*hook_names):
+@decorator_with_args
+def hook_register(function, *hook_names):
     """Tag a method to be picked up later"""
-    def decorator(function):
-        hooks = getattr(function, HOOK_STORE, set())
-        hooks |= set(hook_names)
-        setattr(function, HOOK_STORE, hooks)
-        return function
-    return decorator
+    hooks = getattr(function, HOOK_STORE, set())
+    hooks |= set(hook_names)
+    setattr(function, HOOK_STORE, hooks)
+    return function
 
 
-def precall_hook_register(*hook_names):
+@decorator_with_args
+def precall_hook_register(function, *hook_names):
     """Tag a method to be run before the call to a method"""
     hook_names = [PRECALL_HOOK_PREFIX + name for name in hook_names]
-    return hook_register(*hook_names)
+    return hook_register(*hook_names)(function)
 
 
-def postcall_hook_register(*hook_names):
+@decorator_with_args
+def postcall_hook_register(function, *hook_names):
     """Tag a method to be run after the call to a method"""
     hook_names = [POSTCALL_HOOK_PREFIX + name for name in hook_names]
-    return hook_register(*hook_names)
+    return hook_register(*hook_names)(function)
 
 
-def call_hook(name):
+@decorator_with_args
+def call_hook(method, name):
     """Run the call hooks before and after calling the method"""
-    def decorator(method):
-        def _wrapped(self, *args, **kwargs):
-            self.run_hooks(PRECALL_HOOK_PREFIX + name, *args, **kwargs)
-            rv = method(self, *args, **kwargs)
-            self.run_hooks(POSTCALL_HOOK_PREFIX + name, *args, **kwargs)
-        return _wrapped
-    return decorator
+    def _wrapped(self, *args, **kwargs):
+        self.run_hooks(PRECALL_HOOK_PREFIX + name, *args, **kwargs)
+        rv = method(self, *args, **kwargs)
+        self.run_hooks(POSTCALL_HOOK_PREFIX + name, *args, **kwargs)
+    return _wrapped
 
 
 class HookMeta(type):

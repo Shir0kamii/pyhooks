@@ -4,7 +4,7 @@ import inspect
 HOOK_STORE = "_pyhook_hooks"
 
 
-def hook(*hook_names):
+def hook_register(*hook_names):
     """Tag a method to be picked up later"""
     def decorator(function):
         hooks = getattr(function, HOOK_STORE, set())

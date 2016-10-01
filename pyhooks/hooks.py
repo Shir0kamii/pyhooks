@@ -3,41 +3,41 @@ import inspect
 
 from pyhooks.utils import decorator_with_args
 
-HOOK_STORE = "_pyhook_hooks"
-PRECALL_HOOK_PREFIX = "pre_"
-POSTCALL_HOOK_PREFIX = "post_"
+TAG_STORE = "_pyhook_tags"
+PRECALL_TAG_PREFIX = "pre_"
+POSTCALL_TAG_PREFIX = "post_"
 
 
 @decorator_with_args
-def hook_register(function, *hook_names):
+def hook_register(function, *tag_names):
     """Tag a method to be picked up later"""
-    hooks = getattr(function, HOOK_STORE, set())
-    hooks |= set(hook_names)
-    setattr(function, HOOK_STORE, hooks)
+    tags = getattr(function, TAG_STORE, set())
+    tags |= set(tag_names)
+    setattr(function, TAG_STORE, tags)
     return function
 
 
 @decorator_with_args
-def precall_hook_register(function, *hook_names):
+def precall_hook_register(function, *tag_names):
     """Tag a method to be run before the call to a method"""
-    hook_names = [PRECALL_HOOK_PREFIX + name for name in hook_names]
-    return hook_register(*hook_names)(function)
+    tag_names = [PRECALL_TAG_PREFIX + name for name in tag_names]
+    return hook_register(*tag_names)(function)
 
 
 @decorator_with_args
-def postcall_hook_register(function, *hook_names):
+def postcall_hook_register(function, *tag_names):
     """Tag a method to be run after the call to a method"""
-    hook_names = [POSTCALL_HOOK_PREFIX + name for name in hook_names]
-    return hook_register(*hook_names)(function)
+    tag_names = [POSTCALL_TAG_PREFIX + name for name in tag_names]
+    return hook_register(*tag_names)(function)
 
 
 @decorator_with_args
 def call_hook(method, name):
     """Run the call hooks before and after calling the method"""
     def _wrapped(self, *args, **kwargs):
-        self.run_hooks(PRECALL_HOOK_PREFIX + name, *args, **kwargs)
+        self.run_hooks(PRECALL_TAG_PREFIX + name, *args, **kwargs)
         rv = method(self, *args, **kwargs)
-        self.run_hooks(POSTCALL_HOOK_PREFIX + name, *args, **kwargs)
+        self.run_hooks(POSTCALL_TAG_PREFIX + name, *args, **kwargs)
     return _wrapped
 
 
@@ -66,11 +66,11 @@ class HookMeta(type):
                 continue
 
             try:
-                hook_names = getattr(attr, HOOK_STORE)
+                tag_names = getattr(attr, TAG_STORE)
             except AttributeError:
                 continue
 
-            for name in hook_names:
+            for name in tag_names:
                 # use name here so we can get the bound method later, in case
                 # the processor was a descriptor or something.
                 self.__hooks__[name].append(attr)

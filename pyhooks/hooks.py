@@ -8,12 +8,16 @@ PRECALL_TAG_PREFIX = "pre_"
 POSTCALL_TAG_PREFIX = "post_"
 
 
+def bind_tags_to_function(function, *tag_names):
+    binded_tags = getattr(function, TAG_STORE, set())
+    tags = set(tag_names)
+    setattr(function, TAG_STORE, tags)
+
+
 @decorator_with_args
 def hook_register(function, *tag_names):
     """Tag a method to be picked up later"""
-    tags = getattr(function, TAG_STORE, set())
-    tags |= set(tag_names)
-    setattr(function, TAG_STORE, tags)
+    bind_tags_to_function(function, *tag_names)
     return function
 
 
@@ -21,14 +25,16 @@ def hook_register(function, *tag_names):
 def precall_hook_register(function, *tag_names):
     """Tag a method to be run before the call to a method"""
     tag_names = [PRECALL_TAG_PREFIX + name for name in tag_names]
-    return hook_register(*tag_names)(function)
+    bind_tags_to_function(function, *tag_names)
+    return function
 
 
 @decorator_with_args
 def postcall_hook_register(function, *tag_names):
     """Tag a method to be run after the call to a method"""
     tag_names = [POSTCALL_TAG_PREFIX + name for name in tag_names]
-    return hook_register(*tag_names)(function)
+    bind_tags_to_function(function, *tag_names)
+    return function
 
 
 @decorator_with_args

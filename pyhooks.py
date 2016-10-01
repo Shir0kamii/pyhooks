@@ -2,6 +2,8 @@ from collections import defaultdict
 import inspect
 
 HOOK_STORE = "_pyhook_hooks"
+PRECALL_HOOK_PREFIX = "pre_"
+POSTCALL_HOOK_PREFIX = "post_"
 
 
 def hook_register(*hook_names):
@@ -11,6 +13,29 @@ def hook_register(*hook_names):
         hooks |= set(hook_names)
         setattr(function, HOOK_STORE, hooks)
         return function
+    return decorator
+
+
+def precall_hook_register(*hook_names):
+    """Tag a method to be run before the call to a method"""
+    hook_names = [PRECALL_HOOK_PREFIX + name for name in hook_names]
+    return hook_register(*hook_names)
+
+
+def postcall_hook_register(*hook_names):
+    """Tag a method to be run after the call to a method"""
+    hook_names = [POSTCALL_HOOK_PREFIX + name for name in hook_names]
+    return hook_register(*hook_names)
+
+
+def call_hook(name):
+    """Run the call hooks before and after calling the method"""
+    def decorator(method):
+        def _wrapped(self, *args, **kwargs):
+            self.run_hooks(PRECALL_HOOK_PREFIX + name, *args, **kwargs)
+            rv = method(self, *args, **kwargs)
+            self.run_hooks(POSTCALL_HOOK_PREFIX + name, *args, **kwargs)
+        return _wrapped
     return decorator
 
 
@@ -60,4 +85,5 @@ class HookableClass(metaclass=HookMeta):
             method(self, *attrs, **kwargs)
 
 
-__all__ = ["hook", "HookableClass"]
+__all__ = ["hook_register", "HookableClass", "precall_hook_register",
+           "postcall_hook_register", "call_hook"]

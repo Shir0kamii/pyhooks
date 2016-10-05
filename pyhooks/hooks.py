@@ -1,7 +1,6 @@
 from collections import defaultdict
-import inspect
 
-from pyhooks.utils import decorator_with_args
+from pyhooks.utils import decorator_with_args, mrodir
 
 TAG_STORE = "_pyhook_tags"
 PRECALL_TAG_PREFIX = "pre_"
@@ -57,7 +56,7 @@ class HookableClass():
         if hasattr(cls, "__hooks__"):
             return
         cls.__hooks__ = defaultdict(list)
-        for _, value in cls.iter_real_attrs():
+        for _, value in mrodir(cls):
             try:
                 tag_names = getattr(value, TAG_STORE)
             except AttributeError:
@@ -65,28 +64,6 @@ class HookableClass():
 
             for name in tag_names:
                 cls.__hooks__[name].append(value)
-
-    @classmethod
-    def iter_real_attrs(cls):
-        mro = inspect.getmro(cls)
-        for attr_name in dir(cls):
-            # need to look up the actual descriptor, not whatever might be
-            # bound to the class. this needs to come from the __dict__ of the
-            # declaring class.
-            for parent in mro:
-                try:
-                    attr = parent.__dict__[attr_name]
-                except KeyError:
-                    continue
-                else:
-                    break
-            else:
-                # in case we didn't find the attribute and didn't break above.
-                # we should never hit this - it's just here for completeness
-                # to exclude the possibility of attr being undefined.
-                continue
-
-            yield attr_name, attr
 
     @classmethod
     def get_hook(cls, name):

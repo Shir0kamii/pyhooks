@@ -47,14 +47,29 @@ def call_hook(method, name):
     return _wrapped
 
 
-class HookMeta(type):
+class HookableClass():
 
-    def __init__(self, name, bases, attrs, **kwargs):
-        super(HookMeta, self).__init__(name, bases, attrs, **kwargs)
-        self.__hooks__ = defaultdict(list)
-        mro = inspect.getmro(self)
+    def __init__(self):
+        self.register_hooks()
 
-        for attr_name in dir(self):
+    @classmethod
+    def register_hooks(cls):
+        if hasattr(cls, "__hooks__"):
+            return
+        cls.__hooks__ = defaultdict(list)
+        for _, value in cls.iter_real_attrs():
+            try:
+                tag_names = getattr(value, TAG_STORE)
+            except AttributeError:
+                continue
+
+            for name in tag_names:
+                cls.__hooks__[name].append(value)
+
+    @classmethod
+    def iter_real_attrs(cls):
+        mro = inspect.getmro(cls)
+        for attr_name in dir(cls):
             # need to look up the actual descriptor, not whatever might be
             # bound to the class. this needs to come from the __dict__ of the
             # declaring class.
@@ -71,18 +86,7 @@ class HookMeta(type):
                 # to exclude the possibility of attr being undefined.
                 continue
 
-            try:
-                tag_names = getattr(attr, TAG_STORE)
-            except AttributeError:
-                continue
-
-            for name in tag_names:
-                # use name here so we can get the bound method later, in case
-                # the processor was a descriptor or something.
-                self.__hooks__[name].append(attr)
-    
-
-class HookableClass(metaclass=HookMeta):
+            yield attr_name, attr
 
     @classmethod
     def get_hook(cls, name):

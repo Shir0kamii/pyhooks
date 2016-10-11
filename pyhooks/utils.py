@@ -9,7 +9,7 @@ def decorator_with_args(decorator_to_enhance):
     return decorator_maker
 
 
-def mrodir(klass):
+def mrodir(cls):
     mro = inspect.getmro(cls)
     for attr_name in dir(cls):
         # need to look up the actual descriptor, not whatever might be

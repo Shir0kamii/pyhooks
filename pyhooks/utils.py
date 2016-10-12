@@ -1,6 +1,3 @@
-import inspect
-
-
 def decorator_with_args(decorator_to_enhance):
     def decorator_maker(*args, **kwargs):
         def decorator_wrapper(func):
@@ -10,12 +7,11 @@ def decorator_with_args(decorator_to_enhance):
 
 
 def mrodir(cls):
-    mro = inspect.getmro(cls)
     for attr_name in dir(cls):
         # need to look up the actual descriptor, not whatever might be
         # bound to the class. this needs to come from the __dict__ of the
         # declaring class.
-        for parent in mro:
+        for parent in cls.__mro__:
             try:
                 attr = parent.__dict__[attr_name]
             except KeyError:

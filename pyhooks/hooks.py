@@ -9,7 +9,7 @@ class Hook(object):
 
     def __call__(self, *args, **kwargs):
         self.run_tagged_methods(self.name, PRECALL_TAG, *args, **kwargs)
-        return_value = self.method(self,*args, **kwargs)
+        return_value = self.method(self.instance, *args, **kwargs)
         self.run_tagged_methods(self.name, POSTCALL_TAG, *args, **kwargs)
         return return_value
 

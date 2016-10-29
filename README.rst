@@ -2,6 +2,8 @@
 PyHooks
 #######
 
+.. image:: https://img.shields.io/travis/Shir0kamii/pyhooks.svg
+
 PyHooks is meant to expose method hook for classes
 
 =======

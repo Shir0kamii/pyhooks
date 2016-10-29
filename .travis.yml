@@ -4,13 +4,19 @@ python:
   - "2.7"
   - "3.5"
 
-install: "pip install pytest-cov coveralls"
+install: "pip install pytest-cov coveralls codeclimate-test-reporter"
 
 # command to run tests
 script:
   - "py.test tests/*.py --capture=no --showlocals -vv --cov-report term-missing --cov pyhooks --no-cov-on-fail"
+  - "codeclimate-test-reporter --token e96388a1b31de4ddec6bd9c38e4228eafa04e780fd7edb17685e77546d7e8bec"
 
 after_success: coveralls
 
 sudo: false
 cache: pip
+
+addons:
+  code_climate:
+    repo_token: e96388a1b31de4ddec6bd9c38e4228eafa04e780fd7edb17685e77546d7e8bec
+

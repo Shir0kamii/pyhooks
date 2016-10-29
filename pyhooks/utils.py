@@ -1,4 +1,5 @@
 from collections import defaultdict
+import inspect
 
 
 def decorator_with_args(decorator_to_enhance):
@@ -31,11 +32,12 @@ def decorator_with_args(decorator_to_enhance):
 
 def mrodir(cls):
     """Iterate on attributes of a class with respect to MRO"""
+    mro = inspect.getmro(cls)
     for attr_name in dir(cls):
         # need to look up the actual descriptor, not whatever might be
         # bound to the class. this needs to come from the __dict__ of the
         # declaring class.
-        for parent in cls.__mro__:
+        for parent in mro:
             try:
                 attr = parent.__dict__[attr_name]
             except KeyError:

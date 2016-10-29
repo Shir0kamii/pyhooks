@@ -1,0 +1,12 @@
+language: python
+
+python:
+  - "2.7"
+  - "3.5"
+
+# command to run tests
+script:
+  - "py.test tests/*.py --capture=no --showlocals -vv"
+
+sudo: false
+cache: pip

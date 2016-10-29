@@ -1,4 +1,5 @@
 from collections import defaultdict, namedtuple
+from functools import partial
 
 from pyhooks.utils import mrodir, decorator_with_args, defaultdict_factory
 
@@ -40,19 +41,8 @@ def tag_register(function, location, tag_name):
     return function
 
 
-@decorator_with_args
-def precall_register(function, tag_name):
-    """Decorates a function with precall location and name"""
-    bind_tags(function, PRECALL_TAG, tag_name)
-    return function
-
-
-@decorator_with_args
-def postcall_register(function, tag_name):
-    """Decorates a function with postcall location and name"""
-    bind_tags(function, POSTCALL_TAG, tag_name)
-    return function
-
+precall_register = partial(tag_register, PRECALL_TAG)
+postcall_register = partial(tag_register, POSTCALL_TAG)
 
 __all__ = ["bind_tags", "collect_tags_by_hook", "tag_register",
            "precall_register", "postcall_register"]

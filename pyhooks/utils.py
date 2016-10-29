@@ -42,7 +42,7 @@ def mrodir(cls):
                 continue
             else:
                 break
-        else:
+        else: # pragma: no cover
             # in case we didn't find the attribute and didn't break above.
             # we should never hit this - it's just here for completeness
             # to exclude the possibility of attr being undefined.

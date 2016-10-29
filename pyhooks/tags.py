@@ -10,11 +10,10 @@ PRECALL_TAG = "precall"
 POSTCALL_TAG = "postcall"
 
 
-def bind_tags(function, tag_location, *tag_names):
-    """Assign a location and names to a function"""
+def bind_tags(function, tag_location, tag_name):
+    """Assign a location and name to a function"""
     binded_tags = getattr(function, TAG_STORE, set())
-    tags_to_add = set(Tag(tag_location, tag) for tag in tag_names)
-    tags = tags_to_add | binded_tags
+    tags = set([Tag(tag_location, tag_name)]) | binded_tags
     setattr(function, TAG_STORE, tags)
 
 
@@ -35,23 +34,23 @@ def collect_tags_by_hook(cls):
 
 
 @decorator_with_args
-def tag_register(function, location, *tag_names):
-    """Decorates a function with location and names"""
-    bind_tags(function, location, *tag_names)
+def tag_register(function, location, tag_name):
+    """Decorates a function with location and name"""
+    bind_tags(function, location, tag_name)
     return function
 
 
 @decorator_with_args
-def precall_register(function, *tag_names):
-    """Decorates a function with precall location and names"""
-    bind_tags(function, PRECALL_TAG, *tag_names)
+def precall_register(function, tag_name):
+    """Decorates a function with precall location and name"""
+    bind_tags(function, PRECALL_TAG, tag_name)
     return function
 
 
 @decorator_with_args
-def postcall_register(function, *tag_names):
-    """Decorates a function with postcall location and names"""
-    bind_tags(function, POSTCALL_TAG, *tag_names)
+def postcall_register(function, tag_name):
+    """Decorates a function with postcall location and name"""
+    bind_tags(function, POSTCALL_TAG, tag_name)
     return function
 
 

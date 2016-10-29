@@ -1,6 +1,6 @@
 from collections import defaultdict, namedtuple
 
-from pyhooks.utils import mrodir, decorator_with_args
+from pyhooks.utils import mrodir, decorator_with_args, defaultdict_factory
 
 Tag = namedtuple("Tag", ["location", "name"])
 
@@ -15,12 +15,6 @@ def bind_tags(function, tag_location, *tag_names):
     tags_to_add = set(Tag(tag_location, tag) for tag in tag_names)
     tags = tags_to_add | binded_tags
     setattr(function, TAG_STORE, tags)
-
-
-def defaultdict_factory(factory):
-    def init():
-        return defaultdict(factory)
-    return init
 
 
 def collect_tags_by_hook(cls):

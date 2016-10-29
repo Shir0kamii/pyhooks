@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 def decorator_with_args(decorator_to_enhance):
     def decorator_maker(*args, **kwargs):
         def decorator_wrapper(func):
@@ -25,3 +28,9 @@ def mrodir(cls):
             continue
 
         yield attr_name, attr
+
+
+def defaultdict_factory(factory):
+    def init():
+        return defaultdict(factory)
+    return init

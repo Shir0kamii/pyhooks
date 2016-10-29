@@ -4,6 +4,7 @@ PyHooks
 
 .. image:: https://img.shields.io/travis/Shir0kamii/pyhooks/master.svg
 .. image:: https://img.shields.io/coveralls/Shir0kamii/pyhooks/master.svg
+.. image:: https://img.shields.io/codeclimate/github/Shir0kamii/pyhooks.svg
 
 PyHooks is meant to expose method hook for classes
 

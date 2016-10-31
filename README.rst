@@ -47,8 +47,11 @@ will look like this:
         def save(self):
             pass # save implementation here
 
-Thanks to the `@Hook` line, you will be able to add new functions before and
-after the `save` method. If you want to increment a version variable before
+Thanks to the `@Hook` line, you will now be able to add functions that execute
+before and after the `save` method using the decorators `@precall_register` 
+and `@postcall_register`.
+
+For instance, if you want to increment a version variable before 
 saving, you could do:
 
 .. code-block:: python
@@ -62,8 +65,8 @@ saving, you could do:
             self.version += 1
 
 
-The decorator directive indicate to you class that `increment_version` should
-be run before the `save` method.
+The decorator directive indicates to your class that `increment_version` should
+be run before the `save` method that is passed to the decorator as argument.
 
 
 ========

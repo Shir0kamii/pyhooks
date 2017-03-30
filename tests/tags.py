@@ -1,5 +1,4 @@
 from collections import defaultdict
-import pytest
 
 from pyhooks import tags
 

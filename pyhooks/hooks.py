@@ -3,11 +3,11 @@ from pyhooks.tags import collect_tags_by_hook, PRECALL_TAG, POSTCALL_TAG
 
 class Hook(object):
     """Decorate a method to make it hookable
-    
+
     There are cureently two hooks available :
          - precall hooks, which are called before the call to the method
          - postcall hooks, which are called after the call to the method
-         
+
     These two hooks are called with the arguments and keyword arguments passed
     to thw hooked method
     """
@@ -18,7 +18,7 @@ class Hook(object):
         self.name = method.__name__
 
     def __call__(self, *args, **kwargs):
-        """Run the hooks and the hooked method, respecting the location of 
+        """Run the hooks and the hooked method, respecting the location of
         hooks
         """
         self.run_tagged_methods(self.name, PRECALL_TAG, *args, **kwargs)

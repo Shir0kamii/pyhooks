@@ -1,5 +1,4 @@
 from pyhooks import precall_register, postcall_register, Hook
-import logging
 import time
 
 
@@ -28,6 +27,7 @@ class Bruteforcer(HeavyComputation):
     def heavy_computation(self):
         time.sleep(1)
         return 'aldfjqorqlkjt'
+
 
 computer = LifeQuestion()
 print(computer.heavy_computation())

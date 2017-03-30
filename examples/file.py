@@ -1,4 +1,6 @@
 from pyhooks import precall_register, postcall_register, Hook
+
+
 class FileManager(object):
 
     def __init__(self, filename):
@@ -18,5 +20,6 @@ class TextfileManager(FileManager):
     @postcall_register('write')
     def close_file(self, *args):
         self.file.close()
+
 
 TextfileManager("testing.txt").write("This is a test.")

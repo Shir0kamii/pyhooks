@@ -1,6 +1,3 @@
-from pyhooks import hooks
-
-
 def test_method_still_runable_in_mother(mother_class):
     instance = mother_class()
     instance.method()

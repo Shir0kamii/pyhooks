@@ -12,16 +12,9 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-def get_version():
-    if not os.path.isdir(".git"):
-        sys.stderr.write("This does not appear to be a Git repository.")
-        return ""
-    return subprocess.check_output(["git", "describe", "--tags", "--always"],
-                                   universal_newlines=True)[:-1]
-
 setup(
     name="pyhooks",
-    version=get_version(),
+    version="1.0.0",
     author="Shir0kamii",
     author_email="shir0kamii@gmail.com",
     description="Python hooks for methods",

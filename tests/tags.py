@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from pyhooks import tags
+from pyhooks import tags, after
 
 
 def test_bind_tags_use_tag_store(method):
@@ -31,3 +31,13 @@ def test_collect_only_tagged_methods(child_class):
                 test_bind_tags_use_tag_store(method)
                 test_bind_tags_store_Tag(method)
                 test_bind_tags_api(method)
+
+
+def test_after(mother_class):
+    class Child(mother_class):
+        @after("method")
+        def test_method(self):
+            self.test = 42
+    obj = Child()
+    obj.method()
+    assert obj.test == 42

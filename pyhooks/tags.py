@@ -43,6 +43,8 @@ def tag_register(function, location, tag_name):
 
 precall_register = partial(tag_register, PRECALL_TAG)
 postcall_register = partial(tag_register, POSTCALL_TAG)
+before = precall_register
+after = postcall_register
 
-__all__ = ["bind_tags", "collect_tags_by_hook", "tag_register",
-           "precall_register", "postcall_register"]
+__all__ = ["after", "before", "bind_tags", "collect_tags_by_hook",
+           "tag_register", "precall_register", "postcall_register"]

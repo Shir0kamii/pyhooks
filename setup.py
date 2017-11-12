@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name="pyhooks",
-    version="1.0.0",
+    version="1.0.1",
     author="Shir0kamii",
     author_email="shir0kamii@gmail.com",
     description="Python hooks for methods",

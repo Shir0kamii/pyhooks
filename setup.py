@@ -24,7 +24,7 @@ setup(
     version=get_version(),
     author="Shir0kamii",
     author_email="shir0kamii@gmail.com",
-    description="appnexus-client is a python wrapper for the Appnexus API",
+    description="Python hooks for methods",
     long_description=read("README.rst"),
     url="https://github.com/Shir0kamii/pyhooks",
     download_url="https://github.com/Shir0kamii/pyhooks/tags",

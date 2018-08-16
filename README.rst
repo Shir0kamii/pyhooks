@@ -8,6 +8,12 @@ PyHooks
 
 PyHooks is meant to expose method hook for classes
 
+======
+Status
+======
+
+This project is maintained, feel free to open issues or pull requests.
+
 =======
 Purpose
 =======

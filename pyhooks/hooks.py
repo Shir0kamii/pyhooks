@@ -21,9 +21,11 @@ class Hook(object):
         """Run the hooks and the hooked method, respecting the location of
         hooks
         """
+        saved_instance = self.instance
         self.run_tagged_methods(self.name, PRECALL_TAG, *args, **kwargs)
-        return_value = self.method(self.instance, *args, **kwargs)
+        return_value = self.method(saved_instance, *args, **kwargs)
         self.run_tagged_methods(self.name, POSTCALL_TAG, *args, **kwargs)
+        self.instance = saved_instance
         return return_value
 
     def __get__(self, instance, owner):

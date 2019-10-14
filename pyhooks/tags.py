@@ -14,7 +14,7 @@ POSTCALL_TAG = "postcall"
 def bind_tags(function, tag_location, tag_name):
     """Assign a location and name to a function"""
     binded_tags = getattr(function, TAG_STORE, set())
-    tags = set([Tag(tag_location, tag_name)]) | binded_tags
+    tags = {Tag(tag_location, tag_name)} | binded_tags
     setattr(function, TAG_STORE, tags)
 
 

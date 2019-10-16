@@ -23,8 +23,8 @@ setup(
     platforms="any",
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 5 - Production/Stable"
-        "Operating System :: Microsoft :: Windows"
+        "Development Status :: 5 - Production/Stable",
+        "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",

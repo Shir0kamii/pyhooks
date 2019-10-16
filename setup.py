@@ -6,8 +6,9 @@ import os
 from setuptools import find_packages, setup
 
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+def read(filename):
+    with open(os.path.join(os.path.dirname(__file__), filename)) as f:
+        return f.read()
 
 
 setup(
@@ -22,15 +23,19 @@ setup(
     platforms="any",
     packages=find_packages(),
     classifiers=[
+        "Development Status :: 5 - Production/Stable"
+        "Operating System :: Microsoft :: Windows"
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: Libraries :: Python Modules"
     ]
 )
